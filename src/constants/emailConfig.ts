@@ -12,6 +12,7 @@ import {
   processDeadlineThreeDays,
   processRollingProject15Days,
   processRollingProject30Days,
+  processRollingProjectLegacy,
   processScoutInvite,
   processSponsorSubmission,
   processSubmissionLike,
@@ -38,6 +39,7 @@ export const emailActionCategoryMapping = {
   deadlineExceededWeek: 'deadlineSponsor',
   rolling15Days: 'deadlineSponsor',
   rolling30Days: 'deadlineSponsor',
+  rollingLegacy: 'deadlineSponsor',
 } as const;
 
 export const emailTypePriority: Record<EmailActionType, number> = {
@@ -57,6 +59,7 @@ export const emailTypePriority: Record<EmailActionType, number> = {
   deadlineExtended: 2,
   rolling15Days: 2,
   rolling30Days: 2,
+  rollingLegacy: 2,
   deadline3days: 3,
   createListing: 4,
   weeklyListingRoundup: 5,
@@ -76,6 +79,7 @@ export const emailProcessors: Record<EmailActionType, Function> = {
   deadlineExtended: processDeadlineExtended,
   rolling15Days: processRollingProject15Days,
   rolling30Days: processRollingProject30Days,
+  rollingLegacy: processRollingProjectLegacy,
   scoutInvite: processScoutInvite,
   submissionLike: processSubmissionLike,
   submissionSponsor: processSponsorSubmission,

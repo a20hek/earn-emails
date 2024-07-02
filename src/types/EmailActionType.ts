@@ -12,6 +12,7 @@ export type EmailActionType =
   | 'deadlineExtended'
   | 'rolling15Days'
   | 'rolling30Days'
+  | 'rollingLegacy'
   | 'scoutInvite'
   | 'submissionLike'
   | 'submissionSponsor'
