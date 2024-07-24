@@ -9,7 +9,8 @@ import { RollingLegacyTemplate } from '../../email-templates';
 export async function processRollingProjectLegacy() {
   dayjs.extend(utc);
 
-  const thirtyDaysAgoEnd = dayjs.utc().add(30, 'day').endOf('day');
+  const thirtyDaysAgoEnd = dayjs.utc().subtract(30, 'day').endOf('day');
+  console.log(thirtyDaysAgoEnd);
 
   const listings = await prisma.bounties.findMany({
     where: {
@@ -18,7 +19,7 @@ export async function processRollingProjectLegacy() {
       isArchived: false,
       status: 'OPEN',
       publishedAt: {
-        gte: thirtyDaysAgoEnd.toISOString(),
+        lt: thirtyDaysAgoEnd.toISOString(),
       },
       isWinnersAnnounced: false,
       type: 'project',
@@ -30,12 +31,14 @@ export async function processRollingProjectLegacy() {
     },
   });
 
+  console.log(listings);
+
   const emailData = [];
 
   for (const listing of listings) {
     const pocPreference = await getUserEmailPreference(
       listing.pocId,
-      'rolling15Days',
+      'rollingLegacy',
     );
 
     if (!pocPreference) continue;
@@ -45,6 +48,8 @@ export async function processRollingProjectLegacy() {
         listingId: listing.id,
       },
     });
+
+    if (submissionCount === 0) continue;
 
     const emailHtml = render(
       RollingLegacyTemplate({
@@ -59,7 +64,7 @@ export async function processRollingProjectLegacy() {
     emailData.push({
       from: kashEmail,
       to: listing.poc.email,
-      subject: '15 days since adding the listing',
+      subject: 'Good Time to Announce the Winner?',
       html: emailHtml,
     });
   }

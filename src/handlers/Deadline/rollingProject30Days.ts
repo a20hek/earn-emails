@@ -57,6 +57,8 @@ export async function processRollingProject30Days() {
       },
     });
 
+    if (submissionCount === 0) continue;
+
     const emailHtml = render(
       Rolling30DaysTemplate({
         name: listing.poc.firstName!,
@@ -77,7 +79,7 @@ export async function processRollingProject30Days() {
     emailData.push({
       from: kashEmail,
       to: listing.poc.email,
-      subject: '30 days since adding the listing',
+      subject: 'Good Time to Announce the Winner?',
       html: emailHtml,
     });
   }
