@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 export async function processSponsorSubmissions() {
   console.log('subspo');
   const now = dayjs();
-  const twentyFourHoursAgo = now.subtract(2, 'minutes');
+  const twentyFourHoursAgo = now.subtract(24, 'hours');
 
   const listings = await prisma.bounties.findMany({
     where: {
@@ -23,19 +23,13 @@ export async function processSponsorSubmissions() {
         some: {
           createdAt: {
             gte: twentyFourHoursAgo.toDate(),
-          }
-        }
-      }
-    },
-    include: {
-      poc: true,
-      Submission: {
-        where: {
-          createdAt: {
-            gte: twentyFourHoursAgo.toDate(),
           },
         },
       },
+    },
+    include: {
+      poc: true,
+      Submission: true,
     },
   });
 
